@@ -1,39 +1,81 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>PSYCHIC GAME</title>
-        <script src="javascript/game.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Letter guessing game</title>
+    <!-- <script src="javascript/game.js"></script> -->
+
 </head>
 
 <body>
-    <p>
-        <h1>PSYCHIC GAME!!</h1>
-    </p>
-    <P>
-        <h3>Guess what letter I'm thinking of</h3>
-    </P>
+    
+    
+            <div id='start'>
+                <h1>Letter Guessing Game</h1>
+                <div>Guess the letter by pressing the keys fromyour keyboard</div>
+                <div>Wins: <span id='win'>0</span></div>
+                <div>Losses: <span id="loss">0</span></div>
+            </div>
+            <div>Your guesses so far: <span id='guesses'> </span></div>
+            <div>Guesses Left: <spann id="left">13</spann>
+                </div>
+            <script>
+                var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+                var winCounter = 0;
+                var lossCounter = 0;
+                var guessesLeft = 13;
+                var computerGuess = letters[Math.floor(Math.random() * letters.length)];
+                var userGuess = document.getElementById('guesses');
+                var wins = document.getElementById('win');
+                var losses = document.getElementById('loss');
+                var guess = document.getElementById('left');
+                var lettersGuess = []
+                function reset() {
+                    computerGuess = letters[Math.floor(Math.random() * letters.length)];
+                    guessesLeft = 13;
+                }
+                
+                document.onkeyup = function (event) {
+                    var userGuess = event.key;
+                    userGuess.toLowerCase()
+                    
+                    var correctGuess = letters.includes(userGuess);
+                    var isDuplicate = lettersGuess.indexOf(userGuess) > -1;
+                    
+                    if (correctGuess === true && isDuplicate === false) {
+                        lettersGuess.push(userGuess);
+                    }
+                    if (computerGuess === userGuess) {
+                        winCounter++;
+                        lettersGuess.splice(0, lettersGuess.length);
+                        alert('Yes, ' + userGuess + ' is the correct letter. YOU WIN!!');
+                        reset();
+                    }
+                    else {
+                        guessesLeft--;
+                    }
+                    
+                    if (correctGuess === false) {
+                        alert('NOPE, ' + userGuess +  ' is not a letter.')
+                    }
+                    if (isDuplicate === true) {
+                        alert('Try a different letter other than ' + userGuess + ' .')
+                    }
+                    if (guessesLeft === 0) {
+                        lossCounter++;
+                        lettersGuess.splice(0, lettersGuess.length);
+                        alert('The letter I was thinking of is, ' + computerGuess +  ' better luck next time.');
+                        reset()
+                    }
+                guess.textContent = guessesLeft;
+                userGuess.textContent = lettersGuess.join('');
+                wins.textContent = winCounter;
+                losses.textContent = lossCounter;
+                };
 
-    <div>
-        <p id="output"> Press a letter to start playing!
-        </p>
-        <p id="userguess"></p>
-        <p id="computerChoice"></p>
-        <p id="wins"></p>
-        <p id="losses"></p>
-    </div>
-
-    <!-- You're going to make a game just like the one in the video. Essentially, the app randomly picks a letter, and the user has to guess which letter the app chose. Put the following text on your page:
-Guess what letter I'm thinking of
-Wins: (# of times the user has guessed the letter correctly)
-Losses: (# of times the user has failed to guess the letter correctly after exhausting all guesses)
-Guesses Left: (# of guesses left. This will update)
-Your Guesses So Far: (the specific letters that the user typed. Display these until the user either wins or loses.)
-When the player wins, increase the Wins counter and start the game over again (without refreshing the page).
-When the player loses, increase the Losses counter and restart the game without a page refresh (just like when the user wins). -->
-
-</body>
+        </script>
+    </body>
 
 </html>
